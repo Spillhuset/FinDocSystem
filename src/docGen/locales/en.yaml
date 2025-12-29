@@ -1,0 +1,20 @@
+document:
+  title: "VOUCHER FOR EXPENSE REIMBURSEMENT"
+personal_info:
+  name: "Name"
+  phone: "Phone number"
+  date: "Date"
+  account_number: "Account number"
+  refund_date: "Requested refund by (date)"
+  purpose: "Purpose of the voucher"
+attachments_section:
+  heading: "EXPENSES LISTED BELOW – RECEIPTS MUST BE ATTACHED IN THE EMAIL"
+  attachment: "Attachment"
+  invoice_from: "Invoice from"
+  invoice_info: "Regarding"
+  invoice_date: "Date"
+  invoice_sum: "Amount (NOK)"
+  expenses_sum: "Total expenses"
+notice:
+  heading: "Note"
+  default_note: "The form was automatically generated"

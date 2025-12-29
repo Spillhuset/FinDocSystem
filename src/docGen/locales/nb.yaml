@@ -1,0 +1,20 @@
+document:
+  title: "BILAG FOR UTLEGGSOPPGJØR"
+personal_info:
+  name: "Navn"
+  phone: "Telefonnummer"
+  date: "Dato"
+  account_number: "Kontonummer"
+  refund_date: "Ønskes refundert innen (dato)"
+  purpose: "Formål med bilaget"
+attachments_section:
+  heading: "UTGIFTER LISTES OPP UNDER - KVITTERINGER MÅ VEDLEGGES I E-POSTEN"
+  attachment: "Vedlegg"
+  invoice_from: "Regning fra"
+  invoice_info: "Gjelder"
+  invoice_date: "Dato"
+  invoice_sum: "Sum (kr)"
+  expenses_sum: "Sum utgifter"
+notice:
+  heading: "Merknad"
+  default_note: "Skjemaet var automatisk generert"
