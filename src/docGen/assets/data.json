@@ -1,0 +1,47 @@
+{
+  "name": "Navn Navnesen",
+  "phone": "+47 123 45 678",
+  "refund_date": "05.02.2026",
+  "date": "DD.MM.YYYY",
+  "account_number": "1214 37 12345",
+  "purpose": "Hva formålet med bilaget er, eks. om det har vært oppussing, årsmøte, mat til dugnad etc.. Teksten skal passe innenfor rammen, dog kan den strekke seg over to linjer. Vær så detaljert som mulig. is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry'standard dummy text. Hva formålet med bilaget er, eks. om det har vært oppussing, årsmøte, mat til dugnad etc.. Tek",
+  "attachments": [
+    {
+      "file": "elkjop kvittering.png",
+      "invoice_from": "Elkjøp",
+      "invoice_info": "Kjøp av mikrobølgeovn til å ha i serverskapet",
+      "date": "12.10.2002",
+      "invoice_sum": 1000.00
+    },
+    {
+      "file": "rema scan.jpg",
+      "invoice_from": "Rema 1000",
+      "invoice_info": "Coca Cola deluxe som holder i et par dager",
+      "date": "67.68.1337",
+      "invoice_sum": 987.65
+    },
+    {
+      "file": "Espa.jpg",
+      "invoice_from": "Rema 1000",
+      "invoice_info": "Coca Cola deluxe som holder i et par dager",
+      "date": "67.68.1337",
+      "invoice_sum": 987.65
+    },
+    {
+      "file": "herregud så mye penger.pdf",
+      "invoice_from": "Pizza Mile",
+      "invoice_info": "Masse pizza til årsmøte som varte over flere år!!",
+      "date": "dd.mm.åååå",
+      "invoice_sum": 999999.99
+    },
+    {
+      "file": "enda mer problemer.pdf",
+      "invoice_from": "Pizza Mile",
+      "invoice_info": "Masse pizza til årsmøte som varte over flere år!!",
+      "date": "dd.mm.åååå",
+      "invoice_sum": 999999.99
+    }
+  ],
+  "expenses_sum": 1001987.64,
+  "note": "Lol, hva gjør dette feltet?"
+}
