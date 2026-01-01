@@ -142,7 +142,7 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
 
         return tbl
 
-    def purpose_field():
+    def purpose_field() -> list[Spacer | Paragraph | Table]:
         if len(provided_data['purpose']) > PURPOSE_MAX_LENGTH:
             raise ValueError(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
 
@@ -150,7 +150,7 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
         data = Paragraph(provided_data['purpose'], normal)
 
         flowable = [Spacer(1, 2 * mm),
-                    Paragraph(f"<b>{locale['personal_info']['purpose']}</b>", normal),
+                    Paragraph(f"<b>{locale['personal_field']['purpose']}</b>", normal),
                     Spacer(1, 1 * mm),
                     Table([[data]], rowHeights=90, colWidths=498.24,
                           style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
@@ -159,12 +159,9 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
                                  ('VALIGN', (0, 0), (-1, -1), 'TOP'),
                                  ('BACKGROUND', (0, 0), (-1, 0), colors.white),
                                  ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                                 ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
-                    ]
-
+                                 ('RIGHTPADDING', (0, 0), (-1, -1), 4)])]
 
         return flowable
-
 
     #Frame 3
     def third_flowable():
