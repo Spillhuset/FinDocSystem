@@ -264,9 +264,10 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
 
     )
 
-    frame3.add(box, doc)
-    doc.save()
-
-if __name__ == '__main__':
+def main() -> None:
     generate_pdf("bilagForUtleggsoppgjør.pdf", "nb",
                  "./assets/spillhusetLogo.png", "./assets/data.json")
+
+
+if __name__ == "__main__":
+    main()
