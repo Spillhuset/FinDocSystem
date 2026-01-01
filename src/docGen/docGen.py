@@ -50,7 +50,7 @@ def get_attachments(invoice) -> list[Paragraph]:
     return data
 
 def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLogo.png",
-                 data_filepath="./assets/data.json"):
+                 data_filepath="./assets/data.json") -> None:
 
     with open(data_filepath, "r", encoding="utf-8") as file:
         provided_data = json.load(file)
@@ -102,14 +102,8 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
     title = styles['Title']
 
 
-
-    ################################ DATA ########################################
-
-
-############################################################################
-    # Creating frames
-    # Frame 1
-    def first_flowable(logo_filepath):
+    # A flowable located in the first frame.
+    def document_header_flowable(logo_filepath) -> list[Table]:
         logo_image = Image(logo_filepath, width=150, height=75)
         header = Paragraph(f"<b> {locale['document']['title'].upper()} </b>", title)
         data = [[logo_image, header]]
