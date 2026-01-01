@@ -120,12 +120,12 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
 
 
     # Frame 2
-    def personal_info():
-        name_label = Paragraph(f"<b>{locale['personal_info']['name']}</b>", normal)
-        phone_label = Paragraph(f"<b>{locale['personal_info']['phone']}</b>", normal)
-        refund_date_label = Paragraph(f"<b>{locale['personal_info']['refund_date']}</b>", normal)
-        date_label = Paragraph(f"<b>{locale['personal_info']['date']}</b>", normal)
-        account_number_label = Paragraph(f"<b>{locale['personal_info']['account_number']}</b>", normal)
+    def personal_field() -> Table:
+        name_label = Paragraph(f"<b>{locale['personal_field']['name']}</b>", normal)
+        phone_label = Paragraph(f"<b>{locale['personal_field']['phone']}</b>", normal)
+        refund_date_label = Paragraph(f"<b>{locale['personal_field']['refund_date']}</b>", normal)
+        date_label = Paragraph(f"<b>{locale['personal_field']['date']}</b>", normal)
+        account_number_label = Paragraph(f"<b>{locale['personal_field']['account_number']}</b>", normal)
 
         name_data = [[name_label, provided_data['name']]]
 
