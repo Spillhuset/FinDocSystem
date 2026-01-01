@@ -29,9 +29,25 @@ def load_locales(chosen_locales):
     with open(LOCALES_FILEPATH + chosen_locales + ".yaml", "r") as yaml_file:
         return yaml.safe_load(yaml_file)
 
+def get_attachments(invoice) -> list[Paragraph]:
+    data = []
 
+    for item in invoice["attachments"]:
+        file_raw = str(item.get("file"))
+        invoice_from_raw = str(item.get("invoice_from"))
+        invoice_info_raw = str(item.get("invoice_info"))
+        date_raw = str(item.get("date"))
+        invoice_sum_raw = str(item.get("invoice_sum"))
 
+        row = [Paragraph(file_raw),
+               Paragraph(invoice_from_raw),
+               Paragraph(invoice_info_raw),
+               Paragraph(date_raw),
+               Paragraph(invoice_sum_raw)]
 
+        data.append(row)
+
+    return data
 
 def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLogo.png",
                  data_filepath="./assets/data.json"):
@@ -85,25 +101,7 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
     normal = styles['Normal']
     title = styles['Title']
 
-###########################################################
 
-    def get_attachments(invoice):
-        data = []
-
-        for item in invoice["attachments"]:
-            file_raw = str(item.get("file"))
-            invoice_from_raw = str(item.get("invoice_from"))
-            invoice_info_raw = str(item.get("invoice_info"))
-            date_raw = str(item.get("date"))
-            invoice_sum_raw = str(item.get("invoice_sum"))
-
-            row = [Paragraph(file_raw), Paragraph(invoice_from_raw),
-                   Paragraph(invoice_info_raw), Paragraph(date_raw),
-                   Paragraph(invoice_sum_raw)]
-
-            data.append(row)
-
-        return data
 
     ################################ DATA ########################################
 
