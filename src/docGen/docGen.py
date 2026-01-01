@@ -23,8 +23,6 @@ STANDARD_TBL_STYLE = [('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)]
 
 
-
-
 def load_locales(chosen_locales):
     with open(LOCALES_FILEPATH + chosen_locales + ".yaml", "r") as yaml_file:
         return yaml.safe_load(yaml_file)
@@ -75,30 +73,25 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
     if not isinstance(input_logo_filepath, str):
         raise TypeError(f"{input_logo_filepath} must be a string")
 
-
-
-
-
+    locale = select_language(language)
     doc = Canvas(filename, pagesize=A4)
 
-###################################### Styles ###############
     styles = getSampleStyleSheet()
     base_font = 'Helvetica'
     label_style = ParagraphStyle(name='Label',
-                                fontName=base_font,
-                                fontSize=10,
-                                leading=12,
-                                alignment=TA_LEFT)
+                                 fontName=base_font,
+                                 fontSize=10,
+                                 leading=12,
+                                 alignment=TA_LEFT)
 
     note_style = ParagraphStyle(name='Small', fontName=base_font, fontSize=9,
-                               leading=11, alignment=TA_LEFT, textColor=colors.grey)
+                                leading=11, alignment=TA_LEFT,
+                                textColor=colors.grey)
 
-    heading1_center = ParagraphStyle(name= 'Heading1_CENTER',
+    heading1_center = ParagraphStyle(name='Heading1_CENTER',
                                      parent=styles['Heading1'],
-                                     alignement=TA_CENTER,
+                                     alignment=TA_CENTER,
                                      fontSize=13)
-
-
 
     normal = styles['Normal']
     title = styles['Title']
@@ -147,7 +140,6 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
     def purpose_field() -> list[Spacer | Paragraph | Table]:
         if len(provided_data['purpose']) > PURPOSE_MAX_LENGTH:
             raise ValueError(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
-
 
         data = Paragraph(provided_data['purpose'], normal)
 
@@ -200,19 +192,48 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
                                     ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
         tbl = Table(attachments_data, hAlign='CENTER', colWidths=attachments_tbl_width,
-                     style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
-                            ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                            ('BACKGROUND', (0, 0), (-1, 0), colors.white),
-                            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                            ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                            ('RIGHTPADDING', (0, 0), (-1, -1), 4)
-                            ])
+                    style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+                           ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                           ('BACKGROUND', (0, 0), (-1, 0), colors.white),
+                           ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                           ('LEFTPADDING', (0, 0), (-1, -1), 4),
+                           ('RIGHTPADDING', (0, 0), (-1, -1), 4)
+                           ])
 
-##################### SUM Field ###############################################
+        ##################### SUM Field ###############################################
 
         sum_data = Paragraph(f"<b>{provided_data['expenses_sum']} kr</b>", normal)
         total_sum = [[sum_expenses_label, '', '', '', sum_data]]
 
+        x1 = 42.52
+        width = 510.24
+
+        # height: 842 , old: 687.40
+        frame1 = Frame(x1, 719, width, 93) # No touch
+        frame2 = Frame(x1, 529, width, 190) # No touch
+        frame3 = Frame(x1, 30, width, 499)
+
+        frame1.add(document_header_flowable(input_logo_filepath), doc)
+        frame2.addFromList(personal_field(), doc)
+
+        try:
+            frame2.addFromList(purpose_field(), doc)
+        except ValueError:
+            print(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
+
+
+        content = third_flowable()
+
+        box = KeepInFrame(
+            maxWidth=frame3.width,           # typically match the frame width
+            maxHeight=frame3.height,         # here: 150
+            content=content,
+            mode="shrink"
+
+        )
+
+        frame3.add(box, doc)
+        doc.save()
         tbl_sum = Table(total_sum, style=[('BOX', (0, 0), (-1, -1), 1.5, colors.black),
                                           ('SPAN', (0, 3), (3, 3)),
                                           ('BACKGROUND', (0, 0), (-1, 0), colors.white),
@@ -221,7 +242,7 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
                                           ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
 
-################### NOTE ###########################
+        ################### NOTE ###########################
         note_data = str(provided_data["note"] + " " + str(locale['notice']['default_note']) + ".")
 
         note_sec = [Spacer(1,5),
@@ -231,32 +252,6 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
         return [frame_heading,tbl_header, tbl] + [tbl_sum] + note_sec
 
 
-    x1 = 42.52
-    width = 510.24
-
-    # height: 842 , old: 687.40
-    frame1 = Frame(x1, 719, width, 93) # No touch
-    frame2 = Frame(x1, 529, width, 190) # No touch
-    frame3 = Frame(x1, 30, width, 499)
-
-    frame1.add(first_flowable(input_logo_filepath), doc)
-    frame2.addFromList(personal_info(), doc)
-
-    try:
-        frame2.addFromList(purpose_field(), doc)
-    except ValueError:
-        print(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
-
-
-    content = third_flowable()
-
-    box = KeepInFrame(
-        maxWidth=frame3.width,           # typically match the frame width
-        maxHeight=frame3.height,         # here: 150
-        content=content,
-        mode="shrink"
-
-    )
 
 def main() -> None:
     generate_pdf("bilagForUtleggsoppgjør.pdf", "nb",
