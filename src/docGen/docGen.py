@@ -1,4 +1,4 @@
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 __author__ = 'Danielfiks'
 __doc__ = '''The purpose of this file is to generate a pdf with a provided json file'''
 
@@ -13,7 +13,9 @@ import yaml
 import json
 
 global logo
-PURPOSE_MAX_LENGTH = 800 # The purpose field has a max length.
+PURPOSE_MAX_LENGTH: int = 800 # The purpose field has a max length.
+LOCALES_FILEPATH: str = "./locales/"
+
 STANDARD_TBL_STYLE = [('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                       ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.black),
                       ('BACKGROUND', (0, 0), (-1, 0), colors.white),
