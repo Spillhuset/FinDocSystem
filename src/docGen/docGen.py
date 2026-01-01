@@ -22,7 +22,12 @@ STANDARD_TBL_STYLE = [('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                       ('LEFTPADDING', (0, 0), (-1, -1), 4),
                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)]
 
-LOCALES_FILEPATH = "./locales/"
+
+
+
+def load_locales(chosen_locales):
+    with open(LOCALES_FILEPATH + chosen_locales + ".yaml", "r") as yaml_file:
+        return yaml.safe_load(yaml_file)
 
 
 
@@ -40,9 +45,7 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
     if not isinstance(input_logo_filepath, str):
         raise TypeError(f"{input_logo_filepath} must be a string")
 
-    def load_locales(chosen_locales):
-        with open(LOCALES_FILEPATH + chosen_locales + ".yaml", "r") as yaml_file:
-            return yaml.safe_load(yaml_file)
+
 
 
     if not isinstance(language, str):
