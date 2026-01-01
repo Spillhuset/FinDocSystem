@@ -29,6 +29,10 @@ def load_locales(chosen_locales):
     with open(LOCALES_FILEPATH + chosen_locales + ".yaml", "r") as yaml_file:
         return yaml.safe_load(yaml_file)
 
+def load_form_data(json_filepath):
+    with open(json_filepath, "r", encoding="utf-8") as file:
+        return json.load(file)
+
 def get_attachments(invoice) -> list[Paragraph]:
     data = []
 
@@ -52,8 +56,7 @@ def get_attachments(invoice) -> list[Paragraph]:
 def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLogo.png",
                  data_filepath="./assets/data.json") -> None:
 
-    with open(data_filepath, "r", encoding="utf-8") as file:
-        provided_data = json.load(file)
+    provided_data = load_form_data(data_filepath)
 
     if not isinstance(filename, str):
         raise TypeError(f"{filename} must be a string")
