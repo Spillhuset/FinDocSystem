@@ -53,6 +53,17 @@ def get_attachments(invoice) -> list[Paragraph]:
 
     return data
 
+def select_language(selected_language):
+    if not isinstance(selected_language, str):
+        raise TypeError(f"{selected_language} must be a string")
+
+    match selected_language:
+        case "en" | "nb" | "nn":
+            return load_locales(selected_language)
+        case _:
+            return load_locales("nb")
+
+
 def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLogo.png",
                  data_filepath="./assets/data.json") -> None:
 
@@ -67,18 +78,6 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
 
 
 
-    if not isinstance(language, str):
-        raise TypeError(f"{language} must be a string")
-
-    match language:
-        case "en":
-            locale = load_locales(language)
-        case "nb":
-            locale = load_locales(language)
-        case "nn":
-            locale = load_locales(language)
-        case _:
-            locale = load_locales("nb")
 
     doc = Canvas(filename, pagesize=A4)
 
