@@ -62,7 +62,7 @@ def select_language(selected_language):
             return load_locales("nb")
 
 # Flowable located in the first frame.
-def document_header_flowable(logo_filepath, styles, locale) -> list[Table]:
+def document_header_flowable(logo_filepath, styles, locale) -> Table:
     logo_image = Image(logo_filepath, width=150, height=75)
     header = Paragraph(f"<b> {locale['document']['title'].upper()} </b>", styles['Title'])
     data = [[logo_image, header]]
