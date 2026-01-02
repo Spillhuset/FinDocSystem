@@ -109,6 +109,15 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
     normal = styles['Normal']
     title = styles['Title']
 
+    doc_style = {
+        "stylesheet": styles,  # the full StyleSheet1
+        "Label": label_style,
+        "Small": note_style,
+        "Heading1_CENTER": heading1_center,
+        "Normal": normal,
+        "Title": title,
+    }
+
 
 
 
