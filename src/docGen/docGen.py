@@ -1,4 +1,4 @@
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 __author__ = 'Danielfiks'
 __doc__ = '''The purpose of this file is to generate a pdf with a provided json file'''
 
@@ -16,6 +16,7 @@ import json
 global logo
 PURPOSE_MAX_LENGTH: int = 800 # The purpose field has a max length.
 LOCALES_FILEPATH: str = "./locales/"
+LOGO_FILEPATH: str = "./assets/spillhusetLogo.png"
 
 STANDARD_TBL_STYLE = [('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                       ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.black),
@@ -130,7 +131,6 @@ def personal_field(provided_data, styles, locale) -> list[Table]:
 
     name_data = [[name_label, provided_data['name']]]
 
-
     data = [[phone_label, provided_data['phone'], date_label, provided_data['date']],
             [refund_date_label, provided_data['refund_date'], account_number_label, provided_data['account_number']]]
 
@@ -140,36 +140,25 @@ def personal_field(provided_data, styles, locale) -> list[Table]:
            Table(data, hAlign='CENTER', colWidths=[60 * mm, None, None, None],
                  style=STANDARD_TBL_STYLE)]
 
-
     return tbl
 
 #Frame 3
 def third_flowable(provided_data, styles, locale):
-    frame_heading = Paragraph(
-        f"<b> {locale['attachments_section']['heading'].upper()} </b>",
-        styles['Heading1_CENTER'])
-    file_label = Paragraph(
-        f"<b>{locale['attachments_section']['attachment']}</b>", styles['Normal'])
-    billing_label = Paragraph(
-        f"<b>{locale['attachments_section']['invoice_from']}</b>", styles['Normal'])
-    receipt_info_label = Paragraph(
-        f"<b>{locale['attachments_section']['invoice_info']}</b>", styles['Normal'])
-    receipt_date_label = Paragraph(
-        f"<b>{locale['attachments_section']['invoice_date']}</b>", styles['Normal'])
-    sum_label = Paragraph(
-        f"<b>{locale['attachments_section']['invoice_sum']}</b>", styles['Normal'])
-    sum_expenses_label = Paragraph(
-        f"<b>{locale['attachments_section']['expenses_sum']}</b>",
-        styles['Label'])
+    expense_heading = Paragraph(f"<b> {locale['attachments_section']['heading'].upper()} </b>", styles['Heading1_CENTER'])
 
-    tbl_heading = [[file_label, billing_label, receipt_info_label,
-                    receipt_date_label, sum_label]]
+    tbl_head = [[
+        Paragraph(f"<b>{locale['attachments_section']['attachment']}</b>", styles['Normal']),
+        Paragraph(f"<b>{locale['attachments_section']['invoice_from']}</b>", styles['Normal']),
+        Paragraph(f"<b>{locale['attachments_section']['invoice_info']}</b>", styles['Normal']),
+        Paragraph(f"<b>{locale['attachments_section']['invoice_date']}</b>", styles['Normal']),
+        Paragraph(f"<b>{locale['attachments_section']['invoice_sum']}</b>", styles['Normal'])
+    ]]
 
     # Get the list
     attachments_data = get_attachments(provided_data)
     attachments_tbl_width = [80, 70, None, 70, 80]
 
-    tbl_header = Table(tbl_heading, hAlign='LEFT', colWidths= attachments_tbl_width,
+    tbl_header = Table(tbl_head, hAlign='LEFT', colWidths= attachments_tbl_width,
                        style = [('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                                 ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                                 ('SPAN', (0, 3), (3, 3)),
@@ -188,7 +177,9 @@ def third_flowable(provided_data, styles, locale):
     ##################### SUM Field ###############################################
 
     sum_data = Paragraph(f"<b>{provided_data['expenses_sum']} kr</b>", styles['Normal'])
-    total_sum = [[sum_expenses_label, '', '', '', sum_data]]
+    total_sum = [
+        [locale['attachments_section']['expenses_sum'], '', '', '', sum_data]
+    ]
 
     tbl_sum = Table(total_sum, style=[('BOX', (0, 0), (-1, -1), 1.5, colors.black),
                                       ('SPAN', (0, 3), (3, 3)),
@@ -208,9 +199,8 @@ def note_field(provided_data, styles, locale) -> list[Paragraph | Spacer]:
             Paragraph(f"{note_body} {default_note_body}.", styles['Note'])]
 
 
-def generate_pdf(filename, language,
-                 input_logo_filepath="./assets/spillhusetLogo.png",
-                 data_filepath="./assets/data.json"):
+def generate_pdf(filename, language, input_logo_filepath,
+                 data_filepath="./assets/data.json") -> None:
 
     if not isinstance(filename, str):
         raise TypeError(f"{filename} must be a string")
@@ -240,8 +230,8 @@ def generate_pdf(filename, language,
     content = third_flowable(provided_data, doc_style(), locale)
 
     box = KeepInFrame(
-        maxWidth=frame3.width,  # typically match the frame width
-        maxHeight=frame3.height,  # here: 150
+        maxWidth=frame3.width,
+        maxHeight=frame3.height,
         content=content,
         mode="shrink"
     )
@@ -251,9 +241,8 @@ def generate_pdf(filename, language,
     doc.save()
 
 def main() -> None:
-
     generate_pdf("bilagForUtleggsoppgjør.pdf", "nb",
-                 "./assets/spillhusetLogo.png", "./assets/data.json")
+                 LOGO_FILEPATH, "./assets/data.json")
 
 if __name__ == "__main__":
     main()
