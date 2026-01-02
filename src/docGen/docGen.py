@@ -85,8 +85,8 @@ def select_language(selected_language):
             return load_locales(selected_language)
         case _:
             return load_locales("nb")
-
 # Flowable located in the first frame.
+
 def document_header_flowable(logo_filepath, styles, locale) -> Table:
     logo_image = Image(logo_filepath, width=150, height=75)
     header = Paragraph(f"<b> {locale['document']['title'].upper()} </b>", styles['Title'])
@@ -99,8 +99,8 @@ def document_header_flowable(logo_filepath, styles, locale) -> Table:
                        ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
     return tbl
-
 def purpose_field(provided_data, styles, locale) -> list[Spacer | Paragraph | Table]:
+
     if len(provided_data['purpose']) > PURPOSE_MAX_LENGTH:
         raise ValueError(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
 
@@ -111,42 +111,39 @@ def purpose_field(provided_data, styles, locale) -> list[Spacer | Paragraph | Ta
                 Spacer(1, 1 * mm),
                 Table([[data]], rowHeights=90, colWidths=498.24,
                       style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
-                             ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                              ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
                              ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                             ('BACKGROUND', (0, 0), (-1, 0), colors.white),
                              ('LEFTPADDING', (0, 0), (-1, -1), 4),
                              ('RIGHTPADDING', (0, 0), (-1, -1), 4)])]
 
+
+
     return flowable
-
-
-
-    # Frame 2
+# Frame 2
 def personal_field(provided_data, styles, locale) -> list[Table]:
     name_label = Paragraph(f"<b>{locale['personal_info']['name']}</b>", styles['Normal'])
     phone_label = Paragraph(f"<b>{locale['personal_info']['phone']}</b>", styles['Normal'])
     refund_date_label = Paragraph(f"<b>{locale['personal_info']['refund_date']}</b>", styles['Normal'])
     date_label = Paragraph(f"<b>{locale['personal_info']['date']}</b>", styles['Normal'])
+
     account_number_label = Paragraph(f"<b>{locale['personal_info']['account_number']}</b>", styles['Normal'])
 
     name_data = [[name_label, provided_data['name']]]
 
+
     data = [[phone_label, provided_data['phone'], date_label, provided_data['date']],
             [refund_date_label, provided_data['refund_date'], account_number_label, provided_data['account_number']]]
-
 
     tbl = [Table(name_data, hAlign='CENTER', colWidths=[60 * mm, None],
                  style=STANDARD_TBL_STYLE),
 
            Table(data, hAlign='CENTER', colWidths=[60 * mm, None, None, None],
-                 style=STANDARD_TBL_STYLE)
-           ]
+                 style=STANDARD_TBL_STYLE)]
+
 
     return tbl
 
-
-    #Frame 3
+#Frame 3
 def third_flowable(provided_data, styles, locale):
     frame_heading = Paragraph(
         f"<b> {locale['attachments_section']['heading'].upper()} </b>",
@@ -165,7 +162,8 @@ def third_flowable(provided_data, styles, locale):
         f"<b>{locale['attachments_section']['expenses_sum']}</b>",
         styles['Label'])
 
-    tbl_heading = [[file_label, billing_label, receipt_info_label, receipt_date_label, sum_label]]
+    tbl_heading = [[file_label, billing_label, receipt_info_label,
+                    receipt_date_label, sum_label]]
 
     # Get the list
     attachments_data = get_attachments(provided_data)
@@ -183,25 +181,17 @@ def third_flowable(provided_data, styles, locale):
     tbl = Table(attachments_data, hAlign='CENTER', colWidths=attachments_tbl_width,
                 style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                       ('BACKGROUND', (0, 0), (-1, 0), colors.white),
                        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
                        ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)
-                       ])
+                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
     ##################### SUM Field ###############################################
 
     sum_data = Paragraph(f"<b>{provided_data['expenses_sum']} kr</b>", styles['Normal'])
     total_sum = [[sum_expenses_label, '', '', '', sum_data]]
 
-
-
-
-
     tbl_sum = Table(total_sum, style=[('BOX', (0, 0), (-1, -1), 1.5, colors.black),
                                       ('SPAN', (0, 3), (3, 3)),
-                                      ('BACKGROUND', (0, 0), (-1, 0), colors.white),
-                                      ('VALIGN', (0, 0), (-1, -1), 'TOP'),
                                       ('LEFTPADDING', (0, 0), (-1, -1), 4),
                                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
@@ -219,7 +209,6 @@ def third_flowable(provided_data, styles, locale):
 def generate_pdf(filename, language,
                  input_logo_filepath="./assets/spillhusetLogo.png",
                  data_filepath="./assets/data.json"):
-    provided_data = load_form_data(data_filepath)
 
     if not isinstance(filename, str):
         raise TypeError(f"{filename} must be a string")
@@ -227,72 +216,37 @@ def generate_pdf(filename, language,
     if not isinstance(input_logo_filepath, str):
         raise TypeError(f"{input_logo_filepath} must be a string")
 
+    provided_data = load_form_data(data_filepath)
     locale = select_language(language)
-
     doc = Canvas(filename, pagesize=A4)
 
-    styles = getSampleStyleSheet()
-    base_font = 'Helvetica'
-    label_style = ParagraphStyle(name='Label',
-                                 fontName=base_font,
-                                 fontSize=10,
-                                 leading=12,
-                                 alignment=TA_LEFT)
+    x1: float = 42.52
+    width: float = 510.24
 
-    note_style = ParagraphStyle(name='Small', fontName=base_font, fontSize=9,
-                                leading=11, alignment=TA_LEFT,
-                                textColor=colors.grey)
-
-    heading1_center = ParagraphStyle(name='Heading1_CENTER',
-                                     parent=styles['Heading1'],
-                                     alignment=TA_CENTER,
-                                     fontSize=13)
-
-    normal = styles['Normal']
-    title = styles['Title']
-
-    doc_style = {
-        "stylesheet": styles,  # the full StyleSheet1
-        "Label": label_style,
-        "Note": note_style,
-        "Heading1_CENTER": heading1_center,
-        "Normal": normal,
-        "Title": title,
-    }
-
-    x1 = 42.52
-    width = 510.24
-
-    # height: 842 , old: 687.40
     frame1 = Frame(x1, 719, width, 93)  # No touch
     frame2 = Frame(x1, 529, width, 190)  # No touch
     frame3 = Frame(x1, 30, width, 499)
 
-    frame1.add(
-        document_header_flowable(input_logo_filepath, doc_style, locale), doc)
-    frame2.addFromList(personal_field(provided_data, doc_style, locale), doc)
+    frame1.add(document_header_flowable(input_logo_filepath, doc_style(), locale), doc)
+    frame2.addFromList(personal_field(provided_data, doc_style(), locale), doc)
 
     try:
-        frame2.addFromList(purpose_field(provided_data, doc_style, locale),
-                           doc)
+        frame2.addFromList(purpose_field(provided_data, doc_style(), locale), doc)
     except ValueError:
-        print(
-            f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
+        print(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
 
-    content = third_flowable(provided_data, doc_style, locale)
+    content = third_flowable(provided_data, doc_style(), locale)
 
     box = KeepInFrame(
         maxWidth=frame3.width,  # typically match the frame width
         maxHeight=frame3.height,  # here: 150
         content=content,
         mode="shrink"
-
     )
 
     frame3.add(box, doc)
     doc.showPage()
     doc.save()
-
 
 def main() -> None:
 
