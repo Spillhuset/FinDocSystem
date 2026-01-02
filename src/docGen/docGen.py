@@ -196,14 +196,16 @@ def third_flowable(provided_data, styles, locale):
                                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
 
-    ################### NOTE ###########################
-    note_data = str(provided_data["note"] + " " + str(locale['notice']['default_note']) + ".")
+    return ([expense_heading,tbl_header, tbl] + [tbl_sum]
+            + note_field(provided_data, styles, locale))
 
-    note_sec = [Spacer(1,5),
-                Paragraph(f"<b>{locale['notice']['heading']}</b>", styles['Label']),
-                Paragraph(note_data, styles['Note'])]
+def note_field(provided_data, styles, locale) -> list[Paragraph | Spacer]:
+    note_body = str(provided_data["note"])
+    default_note_body = str(locale['notice']['default_note'])
 
-    return [frame_heading,tbl_header, tbl] + [tbl_sum] + note_sec
+    return [Spacer(1, 5),
+            Paragraph(f"<b>{locale['notice']['heading']}</b>", styles['Label']),
+            Paragraph(f"{note_body} {default_note_body}.", styles['Note'])]
 
 
 def generate_pdf(filename, language,
