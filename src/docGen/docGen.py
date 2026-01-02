@@ -1,4 +1,4 @@
-__version__ = '0.1.2'
+__version__ = '0.1.3'
 __author__ = 'Danielfiks'
 __doc__ = '''The purpose of this file is to generate a pdf with a provided json file'''
 
@@ -122,106 +122,157 @@ def personal_field(provided_data, styles, locale) -> list[Table]:
 
 
     #Frame 3
-    def third_flowable():
-        frame_heading = Paragraph(
-            f"<b> {locale['attachments_section']['heading'].upper()} </b>",
-            heading1_center)
-        file_label = Paragraph(
-            f"<b>{locale['attachments_section']['attachment']}</b>", normal)
-        billing_label = Paragraph(
-            f"<b>{locale['attachments_section']['invoice_from']}</b>", normal)
-        receipt_info_label = Paragraph(
-            f"<b>{locale['attachments_section']['invoice_info']}</b>", normal)
-        receipt_date_label = Paragraph(
-            f"<b>{locale['attachments_section']['invoice_date']}</b>", normal)
-        sum_label = Paragraph(
-            f"<b>{locale['attachments_section']['invoice_sum']}</b>", normal)
-        sum_expenses_label = Paragraph(
-            f"<b>{locale['attachments_section']['expenses_sum']}</b>",
-            label_style)
+def third_flowable(provided_data, styles, locale):
+    frame_heading = Paragraph(
+        f"<b> {locale['attachments_section']['heading'].upper()} </b>",
+        styles['Heading1_CENTER'])
+    file_label = Paragraph(
+        f"<b>{locale['attachments_section']['attachment']}</b>", styles['Normal'])
+    billing_label = Paragraph(
+        f"<b>{locale['attachments_section']['invoice_from']}</b>", styles['Normal'])
+    receipt_info_label = Paragraph(
+        f"<b>{locale['attachments_section']['invoice_info']}</b>", styles['Normal'])
+    receipt_date_label = Paragraph(
+        f"<b>{locale['attachments_section']['invoice_date']}</b>", styles['Normal'])
+    sum_label = Paragraph(
+        f"<b>{locale['attachments_section']['invoice_sum']}</b>", styles['Normal'])
+    sum_expenses_label = Paragraph(
+        f"<b>{locale['attachments_section']['expenses_sum']}</b>",
+        styles['Label'])
 
-        tbl_heading = [[file_label, billing_label, receipt_info_label, receipt_date_label, sum_label]]
+    tbl_heading = [[file_label, billing_label, receipt_info_label, receipt_date_label, sum_label]]
 
-        # Get the list
-        attachments_data = get_attachments(provided_data)
-        attachments_tbl_width = [80, 70, None, 70, 80]
+    # Get the list
+    attachments_data = get_attachments(provided_data)
+    attachments_tbl_width = [80, 70, None, 70, 80]
 
-        tbl_header = Table(tbl_heading, hAlign='LEFT', colWidths= attachments_tbl_width,
-                           style = [('BOX', (0, 0), (-1, -1), 0.5, colors.black),
-                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                    ('SPAN', (0, 3), (3, 3)),
-                                    ('BACKGROUND', (0, 0), (-1, 0), colors.whitesmoke),
-                                    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                                    ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                                    ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
+    tbl_header = Table(tbl_heading, hAlign='LEFT', colWidths= attachments_tbl_width,
+                       style = [('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+                                ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                ('SPAN', (0, 3), (3, 3)),
+                                ('BACKGROUND', (0, 0), (-1, 0), colors.whitesmoke),
+                                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                                ('LEFTPADDING', (0, 0), (-1, -1), 4),
+                                ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
-        tbl = Table(attachments_data, hAlign='CENTER', colWidths=attachments_tbl_width,
-                    style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
-                           ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                           ('BACKGROUND', (0, 0), (-1, 0), colors.white),
-                           ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                           ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                           ('RIGHTPADDING', (0, 0), (-1, -1), 4)
-                           ])
+    tbl = Table(attachments_data, hAlign='CENTER', colWidths=attachments_tbl_width,
+                style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('BACKGROUND', (0, 0), (-1, 0), colors.white),
+                       ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                       ('LEFTPADDING', (0, 0), (-1, -1), 4),
+                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)
+                       ])
 
-        ##################### SUM Field ###############################################
+    ##################### SUM Field ###############################################
 
-        sum_data = Paragraph(f"<b>{provided_data['expenses_sum']} kr</b>", normal)
-        total_sum = [[sum_expenses_label, '', '', '', sum_data]]
-
-        x1 = 42.52
-        width = 510.24
-
-        # height: 842 , old: 687.40
-        frame1 = Frame(x1, 719, width, 93) # No touch
-        frame2 = Frame(x1, 529, width, 190) # No touch
-        frame3 = Frame(x1, 30, width, 499)
+    sum_data = Paragraph(f"<b>{provided_data['expenses_sum']} kr</b>", styles['Normal'])
+    total_sum = [[sum_expenses_label, '', '', '', sum_data]]
 
 
-        frame1.add(document_header_flowable(input_logo_filepath, doc_style, locale), doc)
-        frame2.addFromList(personal_field(), doc)
-
-        try:
-            frame2.addFromList(purpose_field(), doc)
-        except ValueError:
-            print(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
 
 
-        content = third_flowable()
 
-        box = KeepInFrame(
-            maxWidth=frame3.width,           # typically match the frame width
-            maxHeight=frame3.height,         # here: 150
-            content=content,
-            mode="shrink"
-
-        )
-
-        frame3.add(box, doc)
-        doc.save()
-        tbl_sum = Table(total_sum, style=[('BOX', (0, 0), (-1, -1), 1.5, colors.black),
-                                          ('SPAN', (0, 3), (3, 3)),
-                                          ('BACKGROUND', (0, 0), (-1, 0), colors.white),
-                                          ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                                          ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                                          ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
+    tbl_sum = Table(total_sum, style=[('BOX', (0, 0), (-1, -1), 1.5, colors.black),
+                                      ('SPAN', (0, 3), (3, 3)),
+                                      ('BACKGROUND', (0, 0), (-1, 0), colors.white),
+                                      ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                                      ('LEFTPADDING', (0, 0), (-1, -1), 4),
+                                      ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
 
-        ################### NOTE ###########################
-        note_data = str(provided_data["note"] + " " + str(locale['notice']['default_note']) + ".")
+    ################### NOTE ###########################
+    note_data = str(provided_data["note"] + " " + str(locale['notice']['default_note']) + ".")
 
-        note_sec = [Spacer(1,5),
-                    Paragraph(f"<b>{locale['notice']['heading']}</b>", label_style),
-                    Paragraph(note_data, note_style)]
+    note_sec = [Spacer(1,5),
+                Paragraph(f"<b>{locale['notice']['heading']}</b>", styles['Label']),
+                Paragraph(note_data, styles['Note'])]
 
-        return [frame_heading,tbl_header, tbl] + [tbl_sum] + note_sec
+    return [frame_heading,tbl_header, tbl] + [tbl_sum] + note_sec
 
+
+def generate_pdf(filename, language,
+                 input_logo_filepath="./assets/spillhusetLogo.png",
+                 data_filepath="./assets/data.json"):
+    provided_data = load_form_data(data_filepath)
+
+    if not isinstance(filename, str):
+        raise TypeError(f"{filename} must be a string")
+
+    if not isinstance(input_logo_filepath, str):
+        raise TypeError(f"{input_logo_filepath} must be a string")
+
+    locale = select_language(language)
+
+    doc = Canvas(filename, pagesize=A4)
+
+    styles = getSampleStyleSheet()
+    base_font = 'Helvetica'
+    label_style = ParagraphStyle(name='Label',
+                                 fontName=base_font,
+                                 fontSize=10,
+                                 leading=12,
+                                 alignment=TA_LEFT)
+
+    note_style = ParagraphStyle(name='Small', fontName=base_font, fontSize=9,
+                                leading=11, alignment=TA_LEFT,
+                                textColor=colors.grey)
+
+    heading1_center = ParagraphStyle(name='Heading1_CENTER',
+                                     parent=styles['Heading1'],
+                                     alignment=TA_CENTER,
+                                     fontSize=13)
+
+    normal = styles['Normal']
+    title = styles['Title']
+
+    doc_style = {
+        "stylesheet": styles,  # the full StyleSheet1
+        "Label": label_style,
+        "Note": note_style,
+        "Heading1_CENTER": heading1_center,
+        "Normal": normal,
+        "Title": title,
+    }
+
+    x1 = 42.52
+    width = 510.24
+
+    # height: 842 , old: 687.40
+    frame1 = Frame(x1, 719, width, 93)  # No touch
+    frame2 = Frame(x1, 529, width, 190)  # No touch
+    frame3 = Frame(x1, 30, width, 499)
+
+    frame1.add(
+        document_header_flowable(input_logo_filepath, doc_style, locale), doc)
+    frame2.addFromList(personal_field(provided_data, doc_style, locale), doc)
+
+    try:
+        frame2.addFromList(purpose_field(provided_data, doc_style, locale),
+                           doc)
+    except ValueError:
+        print(
+            f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
+
+    content = third_flowable(provided_data, doc_style, locale)
+
+    box = KeepInFrame(
+        maxWidth=frame3.width,  # typically match the frame width
+        maxHeight=frame3.height,  # here: 150
+        content=content,
+        mode="shrink"
+
+    )
+
+    frame3.add(box, doc)
+    doc.showPage()
+    doc.save()
 
 
 def main() -> None:
+
     generate_pdf("bilagForUtleggsoppgjør.pdf", "nb",
                  "./assets/spillhusetLogo.png", "./assets/data.json")
-
 
 if __name__ == "__main__":
     main()
