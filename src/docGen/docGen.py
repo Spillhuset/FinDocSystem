@@ -110,21 +110,10 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
     title = styles['Title']
 
 
-    # A flowable located in the first frame.
-    def document_header_flowable(logo_filepath) -> list[Table]:
-        logo_image = Image(logo_filepath, width=150, height=75)
-        header = Paragraph(f"<b> {locale['document']['title'].upper()} </b>", title)
-        data = [[logo_image, header]]
 
-        tbl = Table(data, hAlign='CENTER', colWidths=[55 * mm, None])
-        tbl.setStyle([('BOX', (0, 0), (-1, -1), 0.5, colors.white),
-                      ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.white),
-                      ('BACKGROUND', (0, 0), (-1, 0), colors.white),
-                      ('VALIGN', (0, 0), (-1, -1), 'CENTER'),
-                      ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                      ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
 
-        return tbl
+
+
 
 
     # Frame 2
