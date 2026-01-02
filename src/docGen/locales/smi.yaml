@@ -1,0 +1,20 @@
+document:
+ title: "ČOAHKKÁIGEASSU OVDDAS VUOLGGÁHANBIDJUI"
+personal_info:
+  name: "Namma"
+  phone: "Telefonnummár"
+  date: "Beaivi"
+  account_number: "Kontonummár"
+  refund_date: "Áiggojuvvo ruovttoluotta (beaivi)"
+  purpose: "Čoahkkáigeassu vuođđu"
+attachments_section:
+  heading: "KULUT ČÁLIJUVA DÁLVI - KVITTERINGAT FERTEJIT LASSIIT E-POSTAS"
+  attachment: "Lassit"
+  invoice_from: "Lávdegohččos"
+  invoice_info: "Gielda"
+  invoice_date: "Beaivi"
+  invoice_sum: "Summá (kr)"
+  expenses_sum: "Summá kuluid"
+notice:
+  heading: "Merken"
+  default_note: "Skema lea automáhtalaččat ráhkaduvvon"

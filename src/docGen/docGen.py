@@ -1,4 +1,4 @@
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 __author__ = 'Danielfiks'
 __doc__ = '''The purpose of this file is to generate a pdf with a provided json file'''
 
@@ -81,7 +81,7 @@ def select_language(selected_language):
         raise TypeError(f"{selected_language} must be a string")
 
     match selected_language:
-        case "en" | "nb" | "nn":
+        case "en" | "nb" | "nn" | "smi":
             return load_locales(selected_language)
         case _:
             return load_locales("nb")
