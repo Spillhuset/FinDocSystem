@@ -1,4 +1,4 @@
-__version__ = '0.1.1'
+__version__ = '0.1.2'
 __author__ = 'Danielfiks'
 __doc__ = '''The purpose of this file is to generate a pdf with a provided json file'''
 
@@ -61,6 +61,19 @@ def select_language(selected_language):
         case _:
             return load_locales("nb")
 
+# Flowable located in the first frame.
+def document_header_flowable(logo_filepath, styles, locale) -> list[Table]:
+    logo_image = Image(logo_filepath, width=150, height=75)
+    header = Paragraph(f"<b> {locale['document']['title'].upper()} </b>", styles['Title'])
+    data = [[logo_image, header]]
+
+    tbl = Table(data, hAlign='CENTER', colWidths=[55 * mm, None],
+                style=[('BOX', (0, 0), (-1, -1), 0.5, colors.white),
+                       ('VALIGN', (0, 0), (-1, -1), 'CENTER'),
+                       ('LEFTPADDING', (0, 0), (-1, -1), 4),
+                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)])
+
+    return tbl
 
 def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLogo.png",
                  data_filepath="./assets/data.json") -> None:
