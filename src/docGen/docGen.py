@@ -126,27 +126,27 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
 
 
     # Frame 2
-    def personal_field() -> Table:
-        name_label = Paragraph(f"<b>{locale['personal_field']['name']}</b>", normal)
-        phone_label = Paragraph(f"<b>{locale['personal_field']['phone']}</b>", normal)
-        refund_date_label = Paragraph(f"<b>{locale['personal_field']['refund_date']}</b>", normal)
-        date_label = Paragraph(f"<b>{locale['personal_field']['date']}</b>", normal)
-        account_number_label = Paragraph(f"<b>{locale['personal_field']['account_number']}</b>", normal)
+def personal_field(provided_data, styles, locale) -> list[Table]:
+    name_label = Paragraph(f"<b>{locale['personal_info']['name']}</b>", styles['Normal'])
+    phone_label = Paragraph(f"<b>{locale['personal_info']['phone']}</b>", styles['Normal'])
+    refund_date_label = Paragraph(f"<b>{locale['personal_info']['refund_date']}</b>", styles['Normal'])
+    date_label = Paragraph(f"<b>{locale['personal_info']['date']}</b>", styles['Normal'])
+    account_number_label = Paragraph(f"<b>{locale['personal_info']['account_number']}</b>", styles['Normal'])
 
-        name_data = [[name_label, provided_data['name']]]
+    name_data = [[name_label, provided_data['name']]]
 
-        data = [[phone_label, provided_data['phone'], date_label, provided_data['date']],
-                [refund_date_label, provided_data['refund_date'], account_number_label, provided_data['account_number']]]
+    data = [[phone_label, provided_data['phone'], date_label, provided_data['date']],
+            [refund_date_label, provided_data['refund_date'], account_number_label, provided_data['account_number']]]
 
 
-        tbl = [Table(name_data, hAlign='CENTER', colWidths=[60 * mm, None],
-                     style=STANDARD_TBL_STYLE),
+    tbl = [Table(name_data, hAlign='CENTER', colWidths=[60 * mm, None],
+                 style=STANDARD_TBL_STYLE),
 
-               Table(data, hAlign='CENTER', colWidths=[60 * mm, None, None, None],
-                     style=STANDARD_TBL_STYLE)
-               ]
+           Table(data, hAlign='CENTER', colWidths=[60 * mm, None, None, None],
+                 style=STANDARD_TBL_STYLE)
+           ]
 
-        return tbl
+    return tbl
 
     def purpose_field() -> list[Spacer | Paragraph | Table]:
         if len(provided_data['purpose']) > PURPOSE_MAX_LENGTH:
