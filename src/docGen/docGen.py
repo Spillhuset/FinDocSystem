@@ -75,53 +75,25 @@ def document_header_flowable(logo_filepath, styles, locale) -> Table:
 
     return tbl
 
-def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLogo.png",
-                 data_filepath="./assets/data.json") -> None:
+def purpose_field(provided_data, styles, locale) -> list[Spacer | Paragraph | Table]:
+    if len(provided_data['purpose']) > PURPOSE_MAX_LENGTH:
+        raise ValueError(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
 
-    provided_data = load_form_data(data_filepath)
+    data = Paragraph(provided_data['purpose'], styles['Normal'])
 
-    if not isinstance(filename, str):
-        raise TypeError(f"{filename} must be a string")
+    flowable = [Spacer(1, 2 * mm),
+                Paragraph(f"<b>{locale['personal_info']['purpose']}</b>", styles['Normal']),
+                Spacer(1, 1 * mm),
+                Table([[data]], rowHeights=90, colWidths=498.24,
+                      style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
+                             ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                             ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                             ('BACKGROUND', (0, 0), (-1, 0), colors.white),
+                             ('LEFTPADDING', (0, 0), (-1, -1), 4),
+                             ('RIGHTPADDING', (0, 0), (-1, -1), 4)])]
 
-    if not isinstance(input_logo_filepath, str):
-        raise TypeError(f"{input_logo_filepath} must be a string")
-
-    locale = select_language(language)
-    doc = Canvas(filename, pagesize=A4)
-
-    styles = getSampleStyleSheet()
-    base_font = 'Helvetica'
-    label_style = ParagraphStyle(name='Label',
-                                 fontName=base_font,
-                                 fontSize=10,
-                                 leading=12,
-                                 alignment=TA_LEFT)
-
-    note_style = ParagraphStyle(name='Small', fontName=base_font, fontSize=9,
-                                leading=11, alignment=TA_LEFT,
-                                textColor=colors.grey)
-
-    heading1_center = ParagraphStyle(name='Heading1_CENTER',
-                                     parent=styles['Heading1'],
-                                     alignment=TA_CENTER,
-                                     fontSize=13)
-
-    normal = styles['Normal']
-    title = styles['Title']
-
-    doc_style = {
-        "stylesheet": styles,  # the full StyleSheet1
-        "Label": label_style,
-        "Small": note_style,
-        "Heading1_CENTER": heading1_center,
-        "Normal": normal,
-        "Title": title,
-    }
-
-
-
-
-
+    return flowable
 
 
 
@@ -148,25 +120,6 @@ def personal_field(provided_data, styles, locale) -> list[Table]:
 
     return tbl
 
-    def purpose_field() -> list[Spacer | Paragraph | Table]:
-        if len(provided_data['purpose']) > PURPOSE_MAX_LENGTH:
-            raise ValueError(f"Input is too long. Maximum allowed length is {PURPOSE_MAX_LENGTH} characters.")
-
-        data = Paragraph(provided_data['purpose'], normal)
-
-        flowable = [Spacer(1, 2 * mm),
-                    Paragraph(f"<b>{locale['personal_field']['purpose']}</b>", normal),
-                    Spacer(1, 1 * mm),
-                    Table([[data]], rowHeights=90, colWidths=498.24,
-                          style=[('BOX', (0, 0), (-1, -1), 0.5, colors.black),
-                                 ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                 ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                                 ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                                 ('BACKGROUND', (0, 0), (-1, 0), colors.white),
-                                 ('LEFTPADDING', (0, 0), (-1, -1), 4),
-                                 ('RIGHTPADDING', (0, 0), (-1, -1), 4)])]
-
-        return flowable
 
     #Frame 3
     def third_flowable():
