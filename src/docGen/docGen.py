@@ -1,11 +1,12 @@
-__version__ = '0.1.3'
+__version__ = '0.2.0'
 __author__ = 'Danielfiks'
 __doc__ = '''The purpose of this file is to generate a pdf with a provided json file'''
 
 from reportlab.platypus import Frame, Paragraph, Image, Table, Spacer, KeepInFrame
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle, \
+    PropertySet, StyleSheet1
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.lib.units import mm
 from reportlab.lib.enums import TA_LEFT, TA_CENTER
@@ -22,6 +23,30 @@ STANDARD_TBL_STYLE = [('BOX', (0, 0), (-1, -1), 0.5, colors.black),
                       ('LEFTPADDING', (0, 0), (-1, -1), 4),
                       ('RIGHTPADDING', (0, 0), (-1, -1), 4)]
 
+
+def doc_style() -> dict[str, StyleSheet1 | ParagraphStyle | PropertySet]:
+    styles = getSampleStyleSheet()
+    base_font = 'Helvetica'
+    label_style = ParagraphStyle(name='Label',fontName=base_font, fontSize=10,
+                                 leading=12, alignment=TA_LEFT)
+
+    note_style = ParagraphStyle(name='Small', fontName=base_font, fontSize=9,
+                                leading=11, alignment=TA_LEFT,
+                                textColor=colors.grey)
+
+    heading1_center = ParagraphStyle(name='Heading1_CENTER',
+                                     parent=styles['Heading1'],
+                                     alignment=TA_CENTER,
+                                     fontSize=13)
+
+    return {
+        "stylesheet": styles,  # the full StyleSheet1
+        "Label": label_style,
+        "Note": note_style,
+        "Heading1_CENTER": heading1_center,
+        "Normal": styles['Normal'],
+        "Title": styles['Title']
+    }
 
 def load_locales(chosen_locales):
     with open(LOCALES_FILEPATH + chosen_locales + ".yaml", "r") as yaml_file:
