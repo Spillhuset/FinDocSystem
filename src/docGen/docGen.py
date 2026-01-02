@@ -224,7 +224,8 @@ def generate_pdf(filename, language, input_logo_filepath="./assets/spillhusetLog
         frame2 = Frame(x1, 529, width, 190) # No touch
         frame3 = Frame(x1, 30, width, 499)
 
-        frame1.add(document_header_flowable(input_logo_filepath), doc)
+
+        frame1.add(document_header_flowable(input_logo_filepath, doc_style, locale), doc)
         frame2.addFromList(personal_field(), doc)
 
         try:
